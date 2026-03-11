@@ -1,0 +1,4 @@
+website,username,password,cardNumber,cardName,cardExp,cardCvc,cardZip,cardType,createdAt,projectStrength,avastStrength
+google.com,jeff,!U{OP2-CYh7Zq,4111111111111111,jeff,,,,visa,2026-03-10T14:38:17.211Z,Very Strong,Very strong
+google.com,tt,IuCP7,4111111111111111,george steve,07/27,123,12345,visa,2026-03-10T14:45:11.256Z,Weak,Weak
+google.com,gg,ooDqlSyY,,,07/27,,,unknown,2026-03-10T14:54:08.561Z,Fair,Good

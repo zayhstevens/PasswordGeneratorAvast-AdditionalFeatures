@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Random Password Generator</title>
+  <link rel="stylesheet" href="./css/styles.css" />
+</head>
+<body>
+  <div class="topbar">
+    <a class="topbar__primary" href="#" id="vaultLink">Open vault →</a>
+    <button class="topbar__secondary" type="button" id="exportPlainBtn" title="Download data/vault_plain.csv">Export plain CSV</button>
+    <button class="topbar__secondary" type="button" id="exportEncBtn" title="Download data/vault_encrypted.csv">Export encrypted CSV</button>
+  </div>
+
+  <main class="page">
+    <header class="hero">
+      <h1>Random Password Generator</h1>
+      <p>Instantly create strong and secure passwords to keep your account safe online.</p>
+    </header>
+
+    <section class="layout c-pwd-gen">
+      <div class="illustration">
+        <img id="strengthImage" alt="Strength illustration" src="./assets/Password-Generator-5.svg" />
+      </div>
+
+      <div class="panel">
+        <div class="passwordRow">
+          <div class="pwdField">
+            <input class="c-pwd-gen__password-generated" value="" readonly aria-label="Generated password" />
+            <span class="strengthPill" id="psiPill">—</span>
+            <button class="iconCircle" type="button" id="regenBtn" aria-label="Regenerate" title="Regenerate">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M20 12a8 8 0 1 1-2.34-5.66" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M20 4v6h-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
+
+          <button class="copyBtn" type="button" id="copyBtn">Copy</button>
+          <button class="saveBtn" type="button" id="saveBtn" title="Save">
+            Save
+          </button>
+        </div>
+
+        <div class="strengthCompare">
+          <div class="strengthLine">
+            <span class="strengthLabel">Project 2 Strength Indicator</span>
+            <span class="miniPill" id="projectPill">—</span>
+          </div>
+          <div class="strengthLine">
+            <span class="strengthLabel">Avast’s Strength Indicator</span>
+            <span class="miniPill is-blue" id="avastPill">—</span>
+          </div>
+        </div>
+
+        <div class="lenBlock">
+          <div class="lenLabel">Password length: <span class="c-pwd-gen__length-value">16</span></div>
+          <div class="sliderRow">
+            <button class="circleBtn c-pwd-gen--decrement" type="button" aria-label="Decrease length">−</button>
+            <input class="c-pwd-gen__slider" type="range" min="1" max="50" value="16" />
+            <button class="circleBtn c-pwd-gen--increment" type="button" aria-label="Increase length">+</button>
+          </div>
+        </div>
+
+        <div class="charsBlock">
+          <div class="lenLabel">Characters used:</div>
+          <div class="checks" role="group" aria-label="Character categories">
+            <label class="check">
+              <input class="c-pwd-gen__custom-control-input" type="checkbox" value="A" checked />
+              <span>ABC</span>
+            </label>
+            <label class="check">
+              <input class="c-pwd-gen__custom-control-input" type="checkbox" value="a" checked />
+              <span>abc</span>
+            </label>
+            <label class="check">
+              <input class="c-pwd-gen__custom-control-input" type="checkbox" value="0" checked />
+              <span>123</span>
+            </label>
+            <label class="check">
+              <input class="c-pwd-gen__custom-control-input" type="checkbox" value="!" checked />
+              <span>#$&amp;</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="tinyNote">
+          To save/search the vault CSV files, run <code>python server.py</code> and open <code>http://localhost:5500</code>.
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Save modal -->
+  <dialog id="saveModal">
+    <div class="modalHead">
+      <h3>Save password</h3>
+      <button class="textBtn" id="modalClose" type="button" aria-label="Close">✕</button>
+    </div>
+
+    <div class="modalBody">
+      <div class="modalGrid">
+        <div class="field">
+          <label for="siteInput">Website</label>
+          <input id="siteInput" placeholder="e.g., google.com" />
+        </div>
+        <div class="field">
+          <label for="userInput">Username</label>
+          <input id="userInput" placeholder="e.g., jeff" />
+        </div>
+
+        <div class="field" style="grid-column: 1 / -1;">
+          <label for="pwdInput">Password (saved)</label>
+          <input id="pwdInput" readonly />
+        </div>
+
+        <div class="field" style="grid-column: 1 / -1;">
+          <div class="cardLine">
+            <label for="ccNumber" style="margin:0;">Credit card number</label>
+            <img id="ccLogo" alt="Card logo" src="./assets/cards/unknown.svg" />
+          </div>
+          <input id="ccNumber" inputmode="numeric" placeholder="•••• •••• •••• ••••" />
+        </div>
+        <div class="field" style="grid-column: 1 / -1;">
+          <label for="ccName">Cardholder Name</label>
+          <input id="ccName" placeholder="e.g., JEFF SMITH" autocomplete="off" />
+        </div>
+        <div class="field">
+          <label for="ccExp">Expiry (MM/YY or MM/YYYY)</label>
+          <input id="ccExp" placeholder="07/29" />
+        </div>
+        <div class="field">
+          <label for="ccCvc">CVC</label>
+          <input id="ccCvc" inputmode="numeric" placeholder="123" />
+        </div>
+        <div class="field">
+          <label for="ccZip">Billing Zip Code</label>
+          <input id="ccZip" inputmode="numeric" placeholder="12345" maxlength="5" />
+        </div>
+      </div>
+
+      <div class="errors" id="ccErrors"></div>
+      <div class="errors" id="saveErrors"></div>
+
+      <div class="modalActions">
+        <button class="btnOutline" id="modalCancel" type="button">Cancel</button>
+        <button class="btnPrimary" id="modalSave" type="button">Save</button>
+      </div>
+
+      <div class="tinyNote" style="margin-top:12px;">
+        Saves to the same two files every time: <code>data/vault_plain.csv</code> and <code>data/vault_encrypted.csv</code>.
+      </div>
+    </div>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <!-- Runtime that exposes modules from prettyrandompasswordgenerator -->
+  <script src="./js/pretty_runtime.js"></script>
+  <script src="./js/pretty_chunk.js"></script>
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>
